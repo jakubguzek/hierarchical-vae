@@ -40,7 +40,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--save-visualizations",
         action="store_true",
-        help="store visualization under the default filename in `output-dir` or in current directory"
+        help="store visualization under the default filename in `output-dir` or in current directory",
     )
     return parser.parse_args()
 
@@ -81,10 +81,16 @@ def mean_and_std(path: pathlib.Path, sample_size: int = 1000):
     return images.mean(dim=(0, 1, 2)), images.std(dim=(0, 1, 2))
 
 
+def denormalize(tensor: torch.Tensor) -> np.ndarray:
+    return np.transpose(
+        (tensor - tensor.min()) * 1 / (tensor.max() - tensor.min()), (1, 2, 0)
+    )
+
+
 def setup_data_loaders(data: pathlib.Path) -> dict[str, datasets.ImageFolder]:
     transform = transforms.Compose(
         [
-            transforms.Resize(128),
+            transforms.Resize(224),
             transforms.ToTensor(),
             transforms.RandomAutocontrast(1),
             transforms.Normalize(mean=MEAN, std=STD),
@@ -120,12 +126,12 @@ def main() -> int:
         for i in range(1, rows * cols + 1):
             sample_idx = random.randint(0, len(loader))
             img, label = loader[sample_idx]
-            img = (img - img.min()) * 1 / (img.max() - img.min())
+            img = denormalize(img)
             fig.add_subplot(rows, cols, i)
             fig.suptitle(f"{name.capitalize()} dataset")
             plt.title(LABEL_MAP[label])
             plt.axis("off")
-            plt.imshow(np.transpose(img, (1, 2, 0)))
+            plt.imshow(img)
 
     if args.output_dir:
         output = pathlib.Path(args.output_dir)
@@ -142,7 +148,7 @@ def main() -> int:
                 print(f"{SCRIPT_NAME}: warning: File {save_path} exists.", end=" ")
                 choice = input("Do you wish to overwrite it? [Y/n]: ")
                 if choice.lower() in ["y", "yes"]:
-                    torch.save(train_loader, output)
+                    torch.save(loader, output)
                 else:
                     return 1
             else:
@@ -151,7 +157,7 @@ def main() -> int:
         if args.save_visualizations:
             for i in plt.get_fignums():
                 plt.figure(i)
-                plt.savefig(output/f"Figure{i}.png")
+                plt.savefig(output / f"Figure{i}.png")
 
     if args.save_visualizations and not args.output_dir:
         for i in plt.get_fignums():
