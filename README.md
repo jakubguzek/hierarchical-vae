@@ -10,13 +10,13 @@ Trainig dataset visualiztion after normalization, standarization and resizing of
 
 ![training dataset visualiztion after normalization](./processed_data/Figure1.png)
 
-Test dataset visualiztion after normalization, standarization and resizing of images
-
-![test dataset visualiztion after normalization](./processed_data/Figure2.png)
-
 Validation dataset visualiztion after normalization, standarization and resizing of images
 
-![validation dataset visualiztion after normalization](./processed_data/Figure3.png)
+![Validation dataset visualiztion after normalization](./processed_data/Figure2.png)
+
+Test dataset visualiztion after normalization, standarization and resizing of images
+
+![test dataset visualiztion after normalization](./processed_data/Figure3.png)
 
 ## Visualization of dimensionality reduction
 
