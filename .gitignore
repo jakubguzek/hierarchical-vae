@@ -1,6 +1,6 @@
 # Data directories
 data/
-processed_data/
+processed_data/*.pt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
