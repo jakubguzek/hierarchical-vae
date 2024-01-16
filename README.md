@@ -26,4 +26,4 @@ Test dataset visualiztion after normalization, standarization and resizing of im
 
 A set of activations from convolution filters. Not necessarily ones used in the actual model.
 
-![example convolutions]
+![example convolutions](./Figure_1.png)
